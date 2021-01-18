@@ -3,13 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const app = express();
 
 /**
  * Database Setup
  */
-const url = "mongodb+srv://viictorcamposs:oWRiTT9AkPrN0tIJ@upload-filesapi.kcdgt.mongodb.net/upload?retryWrites=true&w=majority";
+const url = `${process.env.MONGODB_SECRET_URI_UPLOAD_DATABASE}`;
 mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -18,6 +19,10 @@ mongoose.connect(url, {
 app.use(express.json()); // express consegue lidar c requisicoes em formato de json
 app.use(express.urlencoded({ extended: true })); // express consegue lidar com envio de arquivos
 app.use(morgan('dev')); // lib de log
+app.use(
+  '/files', 
+  express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))  
+);
 
 app.use(require('./routes'));
 
