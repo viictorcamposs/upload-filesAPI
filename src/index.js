@@ -1,7 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const app = express();
+
+/**
+ * Database Setup
+ */
+const url = "mongodb+srv://viictorcamposs:oWRiTT9AkPrN0tIJ@upload-filesapi.kcdgt.mongodb.net/upload?retryWrites=true&w=majority";
+mongoose.connect(url, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}); 
 
 app.use(express.json()); // express consegue lidar c requisicoes em formato de json
 app.use(express.urlencoded({ extended: true })); // express consegue lidar com envio de arquivos
