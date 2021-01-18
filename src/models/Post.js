@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3();
 
 const PostSchema = new mongoose.Schema({
   name: String,
@@ -14,5 +17,16 @@ const PostSchema = new mongoose.Schema({
 PostSchema.pre('save', function() {
   !this.url ? this.url = `${process.env.APP_URL}/files/${this.key}` : this.url = this.url
 }) ;
+
+PostSchema.pre('remove', function() {
+  if(process.env.STORAGE_TYPE === 's3') {
+    return s3.deleteObject({
+      Bucket: 'uploadfiles-api',
+      Key: this.key
+    }).promise()
+  } else {
+    
+  }
+});
 
 module.exports = mongoose.model("Post", PostSchema);
