@@ -4,6 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
 
@@ -16,6 +17,7 @@ mongoose.connect(url, {
   useUnifiedTopology: true
 }); 
 
+app.use(cors()); // libera acesso para que todos os dominios acessem minha API
 app.use(express.json()); // express consegue lidar c requisicoes em formato de json
 app.use(express.urlencoded({ extended: true })); // express consegue lidar com envio de arquivos
 app.use(morgan('dev')); // lib de log
